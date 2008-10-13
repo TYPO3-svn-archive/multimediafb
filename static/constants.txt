@@ -1,0 +1,24 @@
+plugin.multimediafb {
+
+	# cat=multimediafb/file/f01; type=file[png]; label= Path to the play-control
+	playPath = EXT:multimediafb/res/player/play.png
+
+	# cat=multimediafb/file/f02; type=file[png]; label= Path to the pause-control
+	pausePath = EXT:multimediafb/res/player/pause.png
+
+	# cat=multimediafb/file/f03; type=file[png]; label= Path to the stop-control
+	stopPath = EXT:multimediafb/res/player/stop.png
+
+	# cat=multimediafb/file/f04; type=file[png]; label= Path to the next-control
+	nextPath = EXT:multimediafb/res/list/next.png
+
+	# cat=multimediafb/file/f05; type=file[png]; label= Path to the prev-control
+	prevPath = EXT:multimediafb/res/list/prev.png
+
+	# cat=multimediafb/file/f06; type=file[png]; label= Path to the save-control
+	savePath = EXT:multimediafb/res/auxil/save.png
+
+	# cat=multimediafb/file/f07; type=file[png]; label= Path to the plugin-control
+	pluginPath = EXT:multimediafb/res/auxil/plugin.png
+
+}

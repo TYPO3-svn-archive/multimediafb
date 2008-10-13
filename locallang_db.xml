@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <type>database</type>
+        <description>Language labels for database tables/fields belonging to extension 'multimediafb'</description>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="tt_content.tx_multimediafb_tag">Which tag should I use?</label>
+            <label index="tt_content.tx_multimediafb_tag.I.0">object: HTML4 and higher standard, supported in newer browser generations</label>
+            <label index="tt_content.tx_multimediafb_tag.I.1">embed: supported in nearly any browser but not in the HTML standard</label>
+            <label index="tt_content.tx_multimediafb_tag.I.2">script</label>
+            <label index="tt_content.tx_multimediafb_tag.I.3">native with namespace or HTML5 (svg/x3d/wrl/video/audio/...)</label>
+            <label index="tt_content.tx_multimediafb_controls">Kind of controls to offer</label>
+            <label index="tt_content.tx_multimediafb_controls.I.0">None</label>
+            <label index="tt_content.tx_multimediafb_controls.I.1">Native</label>
+            <label index="tt_content.tx_multimediafb_controls.I.2">Custom</label>
+            <label index="tt_content.tx_multimediafb_autoplay">Autoplay file</label>
+            <label index="tt_content.tx_multimediafb_autoloop">Autoloop file</label>
+            <label index="tt_content.tx_multimediafb_playlist">Playlist all file</label>
+            <label index="tt_content.tx_multimediafb_failure">How to act if Multimedia can\'t be displayed:</label>
+            <label index="tt_content.tx_multimediafb_failure.I.0">Plugin-note: plugin needed (autodetect, inline javascript)</label>
+            <label index="tt_content.tx_multimediafb_failure.I.1">Plugin-note: other browser needed (autodetect, inline javascript)</label>
+            <label index="tt_content.tx_multimediafb_failure.I.2">Display an image</label>
+            <label index="tt_content.tx_multimediafb_failure.I.3">Display a text</label>
+            <label index="tt_content.tx_multimediafb_filename">Multimedia File:</label>
+            <label index="tt_content.tx_multimediafb_alternative_filename">Replacement graphics if Multimedia isn\'t supported:</label>
+            <label index="tt_content.tx_multimediafb_alternative_body">Replacement text if Multimedia isn\'t supported:</label>
+            <label index="tt_content.tx_multimediafb_width">Width (pixels):</label>
+            <label index="tt_content.tx_multimediafb_height">Height (pixels):</label>
+            <label index="tt_content.tx_multimediafb_orient">Position:</label>
+            <label index="tt_content.tx_multimediafb_link">Link:</label>
+            <label index="tt_content.tx_multimediafb_caption">Caption:</label>
+            <label index="tt_content.tx_multimediafb_caption_position">Align:</label>
+            <label index="tt_content.tx_multimediafb_altText">Alternative Text:</label>
+            <label index="tt_content.tx_multimediafb_titleText">Title Text:</label>
+            <label index="tt_content.tx_multimediafb_longdescURL">Long Description URL:</label>
+            <label index="tt_content.multimediafb">Multimedia w/fallback</label>
+            <label index="tt_content.textmmfb">Text w/multimedia w/fallback</label>
+            <label index="dividers2tabs.multimedia">Multimedia options</label>
+            <label index="dividers2tabs.generall">General options</label>
+        </languageKey>
+    </data>
+</T3locallang>

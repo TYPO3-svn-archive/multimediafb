@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <type>module</type>
+        <description>Language labels for extension 'multimediafb'</description>
+        <fileId>EXT:multimediafb/locallang.xml</fileId>
+        <labelContext type="array">
+            <label index="pi_title"></label>
+            <label index="pi_plus_wiz_description"></label>
+        </labelContext>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="pi1_title">Multimedia w/Fallback TSobj</label>
+            <label index="pi1_plus_wiz_description">Multimedia-Files like images (embedded, link, alt, ...), css_styled_content and dam aware.</label>
+
+            <label index="common_textMultimediafb_title">Text with multimedia w/fallback</label>
+            <label index="common_textMultimediafb_description">Any number of media-files wrapped right around a regular text element.</label>
+            <label index="common_multimediafbOnly_title">Multimedia w/fallback only</label>
+            <label index="common_multimediafbOnly_description">Any number of media-files aligned in columns and rows with caption. Like the media options above but without text.</label>
+        </languageKey>
+    </data>
+</T3locallang>

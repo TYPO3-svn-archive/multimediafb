@@ -1,0 +1,1725 @@
+
+#******************************************************
+# Including library for processing of some elements:
+#******************************************************
+#includeLibs.tx_multimediafb_pi1 = EXT:ttsvg/pi1/class.tx_multimediafb_pi1.php
+
+# *********************************************************************
+# ACCESSIBILTY MODE
+# *********************************************************************
+
+# Match TYPO3 3.9.0 and later
+[compatVersion = 3.9.0]
+
+# ******************
+# CType: multimedia w/fallback
+# ******************
+# (also used for rendering 'textmmfb' type):
+tt_content.multimediafb = COA
+tt_content.multimediafb {
+	10 = < lib.stdheader
+
+	20 = USER
+	20.userFunc = tx_multimediafb_pi1->render_multimediafb
+
+#	20 = MULTIMEDIA
+#	20.file.field = multimedia
+#	20.file.wrap = uploads/media/
+#	20.file.listNum = 0
+#	20.params.field = bodytext
+
+	20 {
+		filePath = uploads/tx_multimediafb/
+		fileList.field = multimedia
+		imgPath = uploads/tx_multimediafb/
+		imgList.field = image
+		textPos.field = imageorient
+
+		# ----------------------------------------------------------------------------------
+		fileObjNum = 1
+		1 {
+			file.import.current = 1
+			file.width.field = imagewidth
+			file.height.field = imageheight
+
+			params = align="top"
+
+			fileLinkWrap = 1
+			fileLinkWrap {
+				typolink.parameter.field = image_link
+				typolink.parameter.listNum.stdWrap.data = register : FILE_NUM_CURRENT
+				typolink.target = {$styles.content.links.target}
+				typolink.extTarget = {$styles.content.links.extTarget}
+			}
+
+			altText = TEXT
+			altText {
+				field = altText
+				split.token.char = 10
+				split.token.if.isTrue = {$styles.content.imgtext.imageTextSplit}
+				split.returnKey.data = register : FILE_NUM_CURRENT
+			}
+
+			titleText < .altText
+			titleText.field = titleText
+
+			longdescURL < .altText
+			longdescURL.field = longdescURL
+
+			emptyTitleHandling = {$styles.content.imgtext.emptyTitleHandling}
+			titleInLink = {$styles.content.imgtext.titleInLink}
+			titleInLinkAndImg = {$styles.content.imgtext.titleInLinkAndImg}
+		}
+
+		# ----------------------------------------------------------------------------------
+		maxW = {$styles.content.imgtext.maxW}
+		maxW.override.data = register:maxImageWidth
+		maxWInText = {$styles.content.imgtext.maxWInText}
+		maxWInText.override.data = register:maxImageWidthInText
+
+		equalH.field = imageheight
+		spaceBelowAbove = 6
+
+		# ----------------------------------------------------------------------------------
+		controlling {
+			object {
+				none {
+					prefix =
+					params {
+						# ----------------------------------------------------------
+						pdf  = #navpanes=0&scrollbar=0&toolbar=0&pagemode=none
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  =
+
+						# ----------------------------------------------------------
+						avi  (
+	<param name="uiMode" value="None" />
+)
+						mpg  (
+	<param name="controller" value="false" />
+)
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   (
+	<param name="controls" value="ImageWindow" />
+)
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+				native {
+					prefix =
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  (
+	<param name="uiMode" value="Full" />
+)
+						mpg  (
+	<param name="controller" value="true" />
+)
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   (
+	<param name="controls" value="All" />
+)
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+				custom {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  (
+	<param name="wmode" value="opaque" />
+)
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  (
+	<param name="uiMode" value="None" />
+	<param name="windowlessVideo" value="True" />
+	<param name="sendPlayStateChangeEvents" value="True" />
+)
+						mpg  (
+	<param name="controller" value="false" />
+)
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   (
+	<param name="controls" value="ImageWindow" />
+)
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+
+					params.wrap (
+	<div class="csc-mmfb-controlbar">
+		<img class="csc-mmfb-control csc-mmfb-save" src="{path:{$plugin.multimediafb.savePath}}"  alt="save" title="Save file to disk" />
+		<img class="csc-mmfb-control csc-mmfb-stop" src="{path:{$plugin.multimediafb.stopPath}}"  alt="stop" title="Stop player" />
+		<img class="csc-mmfb-control csc-mmfb-paus" src="{path:{$plugin.multimediafb.pausePath}}" alt="pause" title="Pause player" />
+		<img class="csc-mmfb-control csc-mmfb-play" src="{path:{$plugin.multimediafb.playPath}}"  alt="play" title="Start player" />
+	</div>
+	|
+)
+					params.wrapalways (
+	<div class="csc-mmfb-controlbar">
+		<a href="###SRC###" title="Save file to disk" target="_blank">
+		<img class="csc-mmfb-control csc-mmfb-save" src="{path:{$plugin.multimediafb.savePath}}"  alt="save" /></a>
+	</div>
+	|
+)
+				}
+			}
+			embed {
+				none {
+					params {
+						# ----------------------------------------------------------
+						pdf  = #navpanes=0&scrollbar=0&toolbar=0&pagemode=none
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  = uiMode="None"
+						mpg  = controller="false"
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   = controls="ImageWindow"
+
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+				native {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  =
+
+						# ----------------------------------------------------------
+						avi  = uiMode="Full"
+						mpg  = controller="true"
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   = controls="All"
+
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+				custom {
+					params {
+						# ----------------------------------------------------------
+						pdf  = #navpanes=0&scrollbar=0&toolbar=0&pagemode=none
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  = onload="alert('add iframe layer below div with custom controls');" wmode="opaque"
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  = onload="alert('add iframe layer below div with custom controls');" uiMode="None" windowlessVideo="True" sendPlayStateChangeEvents="True"
+						mpg  = onload="alert('add iframe layer below div with custom controls');" controller="false"
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   = onload="alert('add iframe layer below div with custom controls');" controls="ImageWindow"
+
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+			}
+			script {
+				none {
+					params {
+						# ----------------------------------------------------------
+						pdf  = settings['pdf' ]['controls'] = 'none';
+						svg  = settings['svg' ]['controls'] = 'none';
+
+						# ----------------------------------------------------------
+						x3d  = settings['x3d' ]['controls'] = 'none';
+						x3dv = settings['x3dv']['controls'] = 'none';
+						wrl  = settings['wrl' ]['controls'] = 'none';
+						vrml = settings['vrml']['controls'] = 'none';
+
+						# ----------------------------------------------------------
+						swf  = settings['swf' ]['controls'] = 'none';
+						flv  = settings['flv' ]['controls'] = 'none';
+
+						# ----------------------------------------------------------
+						avi  = settings['avi' ]['controls'] = 'none';
+						mpg  = settings['mpg' ]['controls'] = 'none';
+						mp4  = settings['mp4' ]['controls'] = 'none';
+						m4v  = settings['m4v' ]['controls'] = 'none';
+						mov  = settings['mov' ]['controls'] = 'none';
+						mng  = settings['mng' ]['controls'] = 'none';
+						rm   = settings['rm'  ]['controls'] = 'none';
+
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  = settings['wmv' ]['controls'] = 'none';
+
+						m1v  = settings['m1v' ]['controls'] = 'none';
+						m2v  = settings['m2v' ]['controls'] = 'none';
+						mp1  = settings['mp1' ]['controls'] = 'none';
+						mp2  = settings['mp2' ]['controls'] = 'none';
+						mpeg = settings['mpeg']['controls'] = 'none';
+						qt   = settings['qt'  ]['controls'] = 'none';
+					}
+				}
+				native {
+					params {
+						# ----------------------------------------------------------
+						pdf  = settings['pdf' ]['controls'] = 'native';
+						svg  = settings['svg' ]['controls'] = 'native';
+
+						# ----------------------------------------------------------
+						x3d  = settings['x3d' ]['controls'] = 'native';
+						x3dv = settings['x3dv']['controls'] = 'native';
+						wrl  = settings['wrl' ]['controls'] = 'native';
+						vrml = settings['vrml']['controls'] = 'native';
+
+						# ----------------------------------------------------------
+						swf  = settings['swf' ]['controls'] = 'native';
+						flv  = settings['flv' ]['controls'] = 'native';
+
+						# ----------------------------------------------------------
+						avi  = settings['avi' ]['controls'] = 'native';
+						mpg  = settings['mpg' ]['controls'] = 'native';
+						mp4  = settings['mp4' ]['controls'] = 'native';
+						m4v  = settings['m4v' ]['controls'] = 'native';
+						mov  = settings['mov' ]['controls'] = 'native';
+						mng  = settings['mng' ]['controls'] = 'native';
+						rm   = settings['rm'  ]['controls'] = 'native';
+
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  = settings['wmv' ]['controls'] = 'native';
+
+						m1v  = settings['m1v' ]['controls'] = 'native';
+						m2v  = settings['m2v' ]['controls'] = 'native';
+						mp1  = settings['mp1' ]['controls'] = 'native';
+						mp2  = settings['mp2' ]['controls'] = 'native';
+						mpeg = settings['mpeg']['controls'] = 'native';
+						qt   = settings['qt'  ]['controls'] = 'native';
+					}
+				}
+				custom {
+					params {
+						# ----------------------------------------------------------
+						pdf  = settings['pdf' ]['controls'] = 'custom';
+						svg  = settings['svg' ]['controls'] = 'custom';
+
+						# ----------------------------------------------------------
+						x3d  = settings['x3d' ]['controls'] = 'custom';
+						x3dv = settings['x3dv']['controls'] = 'custom';
+						wrl  = settings['wrl' ]['controls'] = 'custom';
+						vrml = settings['vrml']['controls'] = 'custom';
+
+						# ----------------------------------------------------------
+						swf  = settings['swf' ]['controls'] = 'custom';
+						flv  = settings['flv' ]['controls'] = 'custom';
+
+						# ----------------------------------------------------------
+						avi  = settings['avi' ]['controls'] = 'custom';
+						mpg  = settings['mpg' ]['controls'] = 'custom';
+						mp4  = settings['mp4' ]['controls'] = 'custom';
+						m4v  = settings['m4v' ]['controls'] = 'custom';
+						mov  = settings['mov' ]['controls'] = 'custom';
+						mng  = settings['mng' ]['controls'] = 'custom';
+						rm   = settings['rm'  ]['controls'] = 'custom';
+
+						# NOTE: video/x-ms-wmv does NOT quit the controls!
+						# NOTE: application/x-ms-wmv does NOT quit the controls!
+						wmv  = settings['wmv' ]['controls'] = 'custom';
+
+						m1v  = settings['m1v' ]['controls'] = 'custom';
+						m2v  = settings['m2v' ]['controls'] = 'custom';
+						mp1  = settings['mp1' ]['controls'] = 'custom';
+						mp2  = settings['mp2' ]['controls'] = 'custom';
+						mpeg = settings['mpeg']['controls'] = 'custom';
+						qt   = settings['qt'  ]['controls'] = 'custom';
+					}
+				}
+			}
+		}
+
+		controlDisplay = none
+
+		# ----------------------------------------------------------------------------------
+		autoplaying {
+			object {
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  (
+	<param name="autoplay" value="false" />
+)
+						mpg  (
+	<param name="autoplay" value="false" />
+)
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   (
+	<param name="autostart" value="false" />
+)
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+
+				on {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  (
+	<param name="autoplay" value="true" />
+)
+						mpg  (
+	<param name="autoplay" value="true" />
+)
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   (
+	<param name="autostart" value="true" />
+)
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+			}
+			embed {
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  = autoplay="false"
+						mpg  = autoplay="false"
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   = autostart="false"
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+
+				on {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  = autoplay="true"
+						mpg  = autoplay="true"
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   = autostart="true"
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+			}
+			script {
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  = settings['pdf' ]['autoplay'] = false;
+						svg  = settings['svg' ]['autoplay'] = false;
+
+						# ----------------------------------------------------------
+						x3d  = settings['x3d' ]['autoplay'] = false;
+						x3dv = settings['x3dv']['autoplay'] = false;
+						wrl  = settings['wrl' ]['autoplay'] = false;
+						vrml = settings['vrml']['autoplay'] = false;
+
+						# ----------------------------------------------------------
+						swf  = settings['swf' ]['autoplay'] = false;
+						flv  = settings['flv' ]['autoplay'] = false;
+
+						# ----------------------------------------------------------
+						avi  = settings['avi' ]['autoplay'] = false;
+						mpg  = settings['mpg' ]['autoplay'] = false;
+						mp4  = settings['mp4' ]['autoplay'] = false;
+						m4v  = settings['m4v' ]['autoplay'] = false;
+						mov  = settings['mov' ]['autoplay'] = false;
+						mng  = settings['mng' ]['autoplay'] = false;
+						rm   = settings['rm'  ]['autoplay'] = false;
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplay!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplay!
+						wmv  = settings['wmv' ]['autoplay'] = false;
+
+						m1v  = settings['m1v' ]['autoplay'] = false;
+						m2v  = settings['m2v' ]['autoplay'] = false;
+						mp1  = settings['mp1' ]['autoplay'] = false;
+						mp2  = settings['mp2' ]['autoplay'] = false;
+						mpeg = settings['mpeg']['autoplay'] = false;
+						qt   = settings['qt'  ]['autoplay'] = false;
+					}
+				}
+
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  = settings['pdf' ]['autoplay'] = true;
+						svg  = settings['svg' ]['autoplay'] = true;
+
+						# ----------------------------------------------------------
+						x3d  = settings['x3d' ]['autoplay'] = true;
+						x3dv = settings['x3dv']['autoplay'] = true;
+						wrl  = settings['wrl' ]['autoplay'] = true;
+						vrml = settings['vrml']['autoplay'] = true;
+
+						# ----------------------------------------------------------
+						swf  = settings['swf' ]['autoplay'] = true;
+						flv  = settings['flv' ]['autoplay'] = true;
+
+						# ----------------------------------------------------------
+						avi  = settings['avi' ]['autoplay'] = true;
+						mpg  = settings['mpg' ]['autoplay'] = true;
+						mp4  = settings['mp4' ]['autoplay'] = true;
+						m4v  = settings['m4v' ]['autoplay'] = true;
+						mov  = settings['mov' ]['autoplay'] = true;
+						mng  = settings['mng' ]['autoplay'] = true;
+						rm   = settings['rm'  ]['autoplay'] = true;
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplay!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplay!
+						wmv  = settings['wmv' ]['autoplay'] = true;
+
+						m1v  = settings['m1v' ]['autoplay'] = true;
+						m2v  = settings['m2v' ]['autoplay'] = true;
+						mp1  = settings['mp1' ]['autoplay'] = true;
+						mp2  = settings['mp2' ]['autoplay'] = true;
+						mpeg = settings['mpeg']['autoplay'] = true;
+						qt   = settings['qt'  ]['autoplay'] = true;
+					}
+				}
+			}
+		}
+
+		autoplayAction = on
+
+		# ----------------------------------------------------------------------------------
+		autolooping {
+			object {
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  (
+	<param name="playCount" value="1" />
+)
+						mpg  (
+	<param name="loop" value="false" />
+)
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   < .mpg
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+
+				on {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  (
+	<param name="playCount" value="999999999" />
+)
+						mpg  (
+	<param name="loop" value="true" />
+)
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   < .mpg
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+			}
+			embed {
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  = playCount="1"
+						mpg  = loop="true"
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   < .mpg
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+
+				on {
+					params {
+						# ----------------------------------------------------------
+						pdf  =
+						svg  =
+
+						# ----------------------------------------------------------
+						x3d  =
+						x3dv =
+						wrl  =
+						vrml < .wrl
+
+						# ----------------------------------------------------------
+						swf  =
+						flv  < .swf
+
+						# ----------------------------------------------------------
+						avi  = playCount="999999999"
+						mpg  = loop="true"
+						mp4  < .mpg
+						m4v  < .mpg
+						mov  < .mpg
+						mng  =
+						rm   < .mpg
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoplays!
+						# NOTE: application/x-ms-wmv does NOT quit the autoplays!
+						wmv  < .avi
+
+						m1v  < .mpg
+						m2v  < .mpg
+						mp1  < .mpg
+						mp2  < .mpg
+						mpeg < .mpg
+						qt   < .mov
+					}
+				}
+			}
+			script {
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  = settings['pdf' ]['autoloop'] = false;
+						svg  = settings['svg' ]['autoloop'] = false;
+
+						# ----------------------------------------------------------
+						x3d  = settings['x3d' ]['autoloop'] = false;
+						x3dv = settings['x3dv']['autoloop'] = false;
+						wrl  = settings['wrl' ]['autoloop'] = false;
+						vrml = settings['vrml']['autoloop'] = false;
+
+						# ----------------------------------------------------------
+						swf  = settings['swf' ]['autoloop'] = false;
+						flv  = settings['flv' ]['autoloop'] = false;
+
+						# ----------------------------------------------------------
+						avi  = settings['avi' ]['autoloop'] = false;
+						mpg  = settings['mpg' ]['autoloop'] = false;
+						mp4  = settings['mp4' ]['autoloop'] = false;
+						m4v  = settings['m4v' ]['autoloop'] = false;
+						mov  = settings['mov' ]['autoloop'] = false;
+						mng  = settings['mng' ]['autoloop'] = false;
+						rm   = settings['rm'  ]['autoloop'] = false;
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoloop!
+						# NOTE: application/x-ms-wmv does NOT quit the autoloop!
+						wmv  = settings['wmv' ]['autoloop'] = false;
+
+						m1v  = settings['m1v' ]['autoloop'] = false;
+						m2v  = settings['m2v' ]['autoloop'] = false;
+						mp1  = settings['mp1' ]['autoloop'] = false;
+						mp2  = settings['mp2' ]['autoloop'] = false;
+						mpeg = settings['mpeg']['autoloop'] = false;
+						qt   = settings['qt'  ]['autoloop'] = false;
+					}
+				}
+
+				off {
+					params {
+						# ----------------------------------------------------------
+						pdf  = settings['pdf' ]['autoloop'] = true;
+						svg  = settings['svg' ]['autoloop'] = true;
+
+						# ----------------------------------------------------------
+						x3d  = settings['x3d' ]['autoloop'] = true;
+						x3dv = settings['x3dv']['autoloop'] = true;
+						wrl  = settings['wrl' ]['autoloop'] = true;
+						vrml = settings['vrml']['autoloop'] = true;
+
+						# ----------------------------------------------------------
+						swf  = settings['swf' ]['autoloop'] = true;
+						flv  = settings['flv' ]['autoloop'] = true;
+
+						# ----------------------------------------------------------
+						avi  = settings['avi' ]['autoloop'] = true;
+						mpg  = settings['mpg' ]['autoloop'] = true;
+						mp4  = settings['mp4' ]['autoloop'] = true;
+						m4v  = settings['m4v' ]['autoloop'] = true;
+						mov  = settings['mov' ]['autoloop'] = true;
+						mng  = settings['mng' ]['autoloop'] = true;
+						rm   = settings['rm'  ]['autoloop'] = true;
+
+						# NOTE: video/x-ms-wmv does NOT quit the autoloop!
+						# NOTE: application/x-ms-wmv does NOT quit the autoloop!
+						wmv  = settings['wmv' ]['autoloop'] = true;
+
+						m1v  = settings['m1v' ]['autoloop'] = true;
+						m2v  = settings['m2v' ]['autoloop'] = true;
+						mp1  = settings['mp1' ]['autoloop'] = true;
+						mp2  = settings['mp2' ]['autoloop'] = true;
+						mpeg = settings['mpeg']['autoloop'] = true;
+						qt   = settings['qt'  ]['autoloop'] = true;
+					}
+				}
+			}
+		}
+
+		autoloopAction = on
+
+		# ----------------------------------------------------------------------------------
+		failing {
+			plugin {
+				hints {
+					swf  = http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash
+					flv  = http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash
+
+					svg  = http://www.adobe.com/svg/viewer/install/
+					x3d  = http://www.bitmanagement.com/download/BS_Contact_VRML/cnt-index.php?lang=de&prod=VRML/X3D
+					wrl  = http://www.bitmanagement.com/download/BS_Contact_VRML/cnt-index.php?lang=de&prod=VRML/X3D
+
+					x3dv < .x3d
+					vrml < .wrl
+
+					avi  =
+					mpg  = http://www.apple.com/quicktime/download/
+					mng  = http://entropymine.com/jason/mngctrl/,http://gjuyn.xs4all.nl/libmng/download.html?cat=6
+					rm   = http://www.free-codecs.com/Real_alternative_download.htm
+					wmv  = http://www.microsoft.com/windows/windowsmedia/de/player/11/default.aspx,http://port25.technet.com/pages/windows-media-player-firefox-plugin-download.aspx
+
+					mov  < .mpg
+					mp4  < .mpg
+
+					m1v  < .mpg
+					m2v  < .mpg
+					m4v  < .mp4
+					mp1  < .mpg
+					mp2  < .mpg
+					mpeg < .mpg
+					qt   < .mov
+				}
+
+				hints.wrap (
+	<div class="csc-mmfb-noplugin" style="width:{register:filewidth}px; height:{register:fileheight}px;">
+		<div class="csc-mmfb-controlbar">
+			<a href="###SRC###" title="Save file to disk" target="_blank">
+			<img class="csc-mmfb-control csc-mmfb-save" src="{path:{$plugin.multimediafb.savePath}}" alt="save" /></a>
+			<a href="###HINT###" title="Download plugin" target="_blank">
+			<img class="csc-mmfb-control csc-mmfb-plug" src="{path:{$plugin.multimediafb.pluginPath}}" alt="plugin" /></a>
+
+			<div class="csc-mmfb-control csc-mmfb-extn" title="{register:filetype}">{register:fileext}</div>
+		</div>
+		|
+	</div>
+)
+
+				hints.wrapalways (
+	<div class="csc-mmfb-noplugin" style="width:{register:filewidth}px; height:{register:fileheight}px;">
+		<div class="csc-mmfb-controlbar">
+			<a href="###SRC###" title="Save file to disk" target="_blank">
+			<img class="csc-mmfb-control csc-mmfb-save" src="{path:{$plugin.multimediafb.savePath}}" alt="save" /></a>
+		</div>
+		|
+	</div>
+)
+			}
+		}
+
+		failMethod = plugin
+
+		# ----------------------------------------------------------------------------------
+		embedding {
+			object {
+				beds {
+					# ----------------------------------------------------------
+					pdf  (
+<object data="###LOCATION###" type="application/pdf" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:CA8A9780-280D-11CF-A24D-444553540000">
+	<param name="src" value="###LOCATION###" />
+<object data="###LOCATION###" type="application/pdf" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###ALTERNATIVE###
+</object>
+</object>
+	###CONTROLS###
+)
+					svg  (
+<object data="###LOCATION###" type="image/svg+xml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:78156a80-c6a1-4bbf-8e6a-3cd390eeb4e2">
+	<param name="src" value="###LOCATION###" />
+<object data="###LOCATION###" type="image/svg+xml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###ALTERNATIVE###
+</object>
+</object>
+)
+
+					# ----------------------------------------------------------
+					x3d  (
+<object data="###LOCATION###" type="model/x3d+xml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:4B6E3013-6E45-11D0-9309-0020AFE05CC8">
+	<param name="src" value="###LOCATION###" />
+<object data="###LOCATION###" type="model/x3d+xml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					x3dv (
+<object data="###LOCATION###" type="model/x3d+vrml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:4B6E3013-6E45-11D0-9309-0020AFE05CC8">
+	<param name="src" value="###LOCATION###" />
+<object data="###LOCATION###" type="model/x3d+vrml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					wrl  (
+<object data="###LOCATION###" type="model/vrml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:4B6E3013-6E45-11D0-9309-0020AFE05CC8">
+	<param name="src" value="###LOCATION###" />
+<object data="###LOCATION###" type="model/vrml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					vrml < .wrl
+
+					# ----------------------------------------------------------
+					swf  (
+<object data="###LOCATION###" type="application/x-shockwave-flash" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+	<param name="src" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="application/x-shockwave-flash" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					flv  (
+<object data="flvplayer.swf?file=###LOCATION###" type="application/x-shockwave-flash" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+	<param name="src" value="flvplayer.swf?file=###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="flvplayer.swf?file=###LOCATION###" type="application/x-shockwave-flash" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="flvplayer.swf?file=###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+
+					# ----------------------------------------------------------
+					avi  (
+<object data="###LOCATION###" type="x-msvideo" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6">
+	<param name="URL" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="x-msvideo" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="URL" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					mpg  (
+<object data="###LOCATION###" type="video/mpeg" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B">
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="video/mpeg" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					mp4  (
+<object data="###LOCATION###" type="video/mp4" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B">
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="video/mp4" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					m4v  (
+<object data="###LOCATION###" type="video/x-m4v" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B">
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="video/x-m4v" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					mov  (
+<object data="###LOCATION###" type="video/quicktime" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B">
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="video/quicktime" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	<param name="showlogo" value="false" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					mng  (
+<object data="###LOCATION###" type="video/x-mng" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:99715EC0-AAFD-11D6-A49D-4D4E47344945">
+	<param name="src" value="###LOCATION###" />
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="video/x-mng" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					rm   (
+<object data="###LOCATION###" type="application/vnd.rn-realmedia" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA">
+	<param name="src" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="application/vnd.rn-realmedia" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="src" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					# NOTE: video/x-ms-wmv does NOT quit the controls!
+					# NOTE: application/x-ms-wmv does NOT quit the controls!
+					wmv  (
+<object data="###LOCATION###" type="application/x-ms-wmp" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6">
+	<param name="URL" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+<object data="###LOCATION###" type="application/x-ms-wmp" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	<param name="URL" value="###LOCATION###" />
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###
+	###ALTERNATIVE###
+</object>
+</object>
+)
+					m1v  < .mpg
+					m2v  < .mpg
+					mp1  < .mpg
+					mp2  < .mpg
+					mpeg < .mpg
+					qt   < .mov
+				}
+			}
+			embed {
+				beds {
+					# ----------------------------------------------------------
+					pdf  (
+<embed src="###LOCATION####navpanes=0&scrollbar=0&toolbar=0&pagemode=none" type="application/pdf" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	###ALTERNATIVE###
+</embed>
+)
+					svg  (
+<embed src="###LOCATION###" type="image/svg+xml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	###ALTERNATIVE###
+</embed>
+)
+
+					# ----------------------------------------------------------
+					x3d  (
+<embed src="###LOCATION###" type="model/x3d+xml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	###ALTERNATIVE###
+</embed>
+)
+					x3dv (
+<embed src="###LOCATION###" type="model/x3d+vrml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	###ALTERNATIVE###
+</embed>
+)
+					wrl  (
+<embed src="###LOCATION###" type="model/vrml" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###>
+	###ALTERNATIVE###
+</embed>
+)
+					vrml < .wrl
+
+					# ----------------------------------------------------------
+					swf  (
+<embed src="###LOCATION###" type="application/x-shockwave-flash" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					flv  (
+<embed src="flvplayer.swf?file=###LOCATION###" type="application/x-shockwave-flash" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+
+					# ----------------------------------------------------------
+					avi  (
+<embed src="###LOCATION###" type="x-msvideo" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					mpg  (
+<embed src="###LOCATION###" type="video/mpeg" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	showlogo="false"
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					mp4  (
+<embed src="###LOCATION###" type="video/mp4" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	showlogo="false"
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					m4v  (
+<embed src="###LOCATION###" type="video/x-m4v" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	showlogo="false"
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					mov  (
+<embed src="###LOCATION###" type="video/quicktime" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	showlogo="false"
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					mng  (
+<embed src="###LOCATION###" type="video/x-mng" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					rm   (
+<embed src="###LOCATION###" type="application/vnd.rn-realmedia" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					# NOTE: video/x-ms-wmv does NOT quit the controls!
+					# NOTE: application/x-ms-wmv does NOT quit the controls!
+					wmv  (
+<embed src="###LOCATION###" type="application/x-ms-wmp" width="{register:filewidth}" height="{register:fileheight}" ###PARAMS###
+	###CONTROLS###
+	###AUTOPLAY###
+	###AUTOLOOP###>
+	###ALTERNATIVE###
+</embed>
+)
+					m1v  < .mpg
+					m2v  < .mpg
+					mp1  < .mpg
+					mp2  < .mpg
+					mpeg < .mpg
+					qt   < .mov
+				}
+			}
+			script {
+				beds {
+					svg = ###LOCATION### {register:filewidth} {register:fileheight} ###ALTERNATIVE###
+					x3d = ###LOCATION### {register:filewidth} {register:fileheight} ###ALTERNATIVE###
+					wrl = ###LOCATION### {register:filewidth} {register:fileheight} ###ALTERNATIVE###
+				}
+			}
+			native {
+				beds {
+					svg = ###LOCATION### {register:filewidth} {register:fileheight} ###ALTERNATIVE###
+					x3d = ###LOCATION### {register:filewidth} {register:fileheight} ###ALTERNATIVE###
+					wrl = ###LOCATION### {register:filewidth} {register:fileheight} ###ALTERNATIVE###
+				}
+			}
+		}
+
+		embedMethod = object
+
+		# ----------------------------------------------------------------------------------
+		caption {
+			1 = TEXT
+			1 {
+				field = imagecaption
+				required = 1
+				parseFunc =< lib.parseFunc
+				br = 1
+				fontTag = <p class="csc-caption">|</p>
+				wrapAlign.field = imagecaption_position
+				split.token.char = 10
+				split.token.if.isPositive = {$styles.content.imgtext.imageTextSplit} + {$styles.content.imgtext.captionSplit}
+				split.returnKey.data = register : FILE_NUM_CURRENT
+			}
+		}
+		# captionSplit is deprecated, use imageTextSplit instead
+		captionSplit = {$styles.content.imgtext.captionSplit}
+		# caption/alttext/title/longdescURL splitting
+		imageTextSplit = {$styles.content.imgtext.imageTextSplit}
+
+		# ----------------------------------------------------------------------------------
+		fileStdWrap.dataWrap = <div class="csc-mmfb-filewrap" style="width:{register:totalwidth}px;"> | </div>
+		fileStdWrapNoWidth.wrap = <div class="csc-mmfb-filewrap"> | </div>
+
+		# ----------------------------------------------------------------------------------
+		layout = CASE
+		layout {
+			key.field = imageorient
+			# above-center
+			default = TEXT
+			default.value = <div class="csc-mmfb csc-mmfb-center csc-mmfb-above###CLASSES###">###FILES######TEXT###</div><div class="csc-mmfb-clear"><!-- --></div>
+			# above-right
+			1 = TEXT
+			1.value = <div class="csc-mmfb csc-mmfb-right csc-mmfb-above###CLASSES###">###FILES######TEXT###</div><div class="csc-mmfb-clear"><!-- --></div>
+			# above-left
+			2 = TEXT
+			2.value = <div class="csc-mmfb csc-mmfb-left csc-mmfb-above###CLASSES###">###FILES######TEXT###</div><div class="csc-mmfb-clear"><!-- --></div>
+			# below-center
+			8 = TEXT
+			8.value = <div class="csc-mmfb csc-mmfb-center csc-mmfb-below###CLASSES###">###TEXT######FILES###</div><div class="csc-mmfb-clear"><!-- --></div>
+			# below-right
+			9 = TEXT
+			9.value = <div class="csc-mmfb csc-mmfb-right csc-mmfb-below###CLASSES###">###TEXT######FILES###</div><div class="csc-mmfb-clear"><!-- --></div>
+			# below-left
+			10 = TEXT
+			10.value = <div class="csc-mmfb csc-mmfb-left csc-mmfb-below###CLASSES###">###TEXT######FILES###</div><div class="csc-mmfb-clear"><!-- --></div>
+			# intext-right
+			17 = TEXT
+			17.value = <div class="csc-mmfb csc-mmfb-intext-right###CLASSES###">###FILES######TEXT###</div>
+			# intext-left
+			18 = TEXT
+			18.value = <div class="csc-mmfb csc-mmfb-intext-left###CLASSES###">###FILES######TEXT###</div>
+			# intext-right-nowrap
+			25 = TEXT
+			25.value = <div class="csc-mmfb csc-mmfb-intext-right-nowrap###CLASSES###">###FILES###<div style="margin-right:{register:rowWidthPlusTextMargin}px;">###TEXT###</div></div><div class="csc-mmfb-clear"><!-- --></div>
+			25.insertData = 1
+			# intext-left-nowrap
+			26 = TEXT
+			26.value = <div class="csc-mmfb csc-mmfb-intext-left-nowrap###CLASSES###">###FILES###<div style="margin-left:{register:rowWidthPlusTextMargin}px;">###TEXT###</div></div><div class="csc-mmfb-clear"><!-- --></div>
+			26.insertData = 1
+		}
+
+		# ----------------------------------------------------------------------------------
+		rendering {
+			dl {
+				oneFileStdWrap.dataWrap = <dl class="csc-mmfb-file###CLASSES###" style="width:{register:filespace}px;"> | </dl>
+				fileTagStdWrap.wrap = <dt class="###SUBCLASS###"> | </dt>
+				editIconsStdWrap.wrap = <dd> | </dd>
+				caption.wrap = <dd class="csc-mmfb-caption"> | </dd>
+			}
+			ul {
+				oneFileStdWrap.dataWrap = <li class="csc-mmfb-file###CLASSES###" style="width:{register:filespace}px;"> | </li>
+				fileTagStdWrap.wrap = <div class="###SUBCLASS###"> | </div>
+				editIconsStdWrap.wrap = <div> | </div>
+				caption.wrap = <div class="csc-mmfb-caption"> | </div>
+			}
+			div {
+				oneFileStdWrap.dataWrap = <div class="csc-mmfb-file###CLASSES###" style="width:{register:filespace}px;"> | </div>
+				fileTagStdWrap.wrap = <div class="###SUBCLASS###"> | </div>
+				editIconsStdWrap.wrap = <div> | </div>
+				caption.wrap = <div class="csc-mmfb-caption"> | </div>
+			}
+		}
+
+		renderMethod = dl
+
+		# ----------------------------------------------------------------------------------
+		editIcons = tt_content : image[imageorient|imagewidth|imageheight],[image_link],imagecaption[imagecaption_position]
+		editIcons.iconTitle.data = LLL:EXT:css_styled_content/pi1/locallang.php:eIcon.multimedia
+
+		caption.editIcons = tt_content : imagecaption[imagecaption_position]
+		caption.editIcons.beforeLastTag = 1
+		caption.editIcons.iconTitle.data = LLL:EXT:css_styled_content/pi1/locallang.php:eIcon.caption
+
+		stdWrap.prefixComment = 2 | Multimedia element:
+	}
+}
+
+# *****************
+# CType: textmmfb
+# *****************
+tt_content.textmmfb = COA
+tt_content.textmmfb {
+	10 = COA
+	10.if.value = 25
+	10.if.isLessThan.field = imageorient
+	10.10 = < lib.stdheader
+
+	20  = < tt_content.multimediafb.20
+	20.text.10 = COA
+	20.text.10 {
+		if.value = 24
+		if.isGreaterThan.field = imageorient
+		10 = < lib.stdheader
+		10.stdWrap.dataWrap = <div class="csc-mmfbHeader csc-mmfbHeader-{field:imageorient}">|</div>
+	}
+	20.text.20 = < tt_content.text.20
+	20.text.wrap = <div class="csc-textmmfb-text"> | </div>
+}
+
+plugin.tx_multimediafb._CSS_DEFAULT_STYLE (
+	/* Captions */
+	DIV.csc-mmfb-caption-c .csc-mmfb-caption { text-align: center; }
+	DIV.csc-mmfb-caption-r .csc-mmfb-caption { text-align: right; }
+	DIV.csc-mmfb-caption-l .csc-mmfb-caption { text-align: left; }
+
+	/* Needed for noRows setting */
+	DIV.csc-mmfb DIV.csc-mmfb-filecolumn { float: left; display: inline; }
+
+	/* Border just around the file */
+	{$styles.content.imgtext.borderSelector} {
+		border: {$styles.content.imgtext.borderThick}px solid {$styles.content.imgtext.borderColor};
+		padding: {$styles.content.imgtext.borderSpace}px {$styles.content.imgtext.borderSpace}px;
+	}
+
+	DIV.csc-mmfb-filewrap { padding: 0; }
+
+	DIV.csc-mmfb IMG { border: none; }
+
+	/* DIV: This will place the files side by side */
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap DIV.csc-mmfb-file { float: left; }
+
+	/* UL: This will place the files side by side */
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap UL { list-style: none; margin: 0; padding: 0; }
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap UL LI { float: left; margin: 0; padding: 0; }
+
+	/* DL: This will place the files side by side */
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap DL.csc-mmfb-file { float: left; }
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap DL.csc-mmfb-file DT { float: none; }
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap DL.csc-mmfb-file DD { float: none; }
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap DL.csc-mmfb-file DD IMG { border: none; } /* FE-Editing Icons */
+	DL.csc-mmfb-file { margin: 0; }
+	DL.csc-mmfb-file DT { margin: 0; }
+	DL.csc-mmfb-file DD { margin: 0; }
+
+	/* Clearer */
+	DIV.csc-mmfb-clear { clear: both; }
+
+	/* Margins around files: */
+
+	/* Multimedias on left, add margin on right */
+	DIV.csc-mmfb-left DIV.csc-mmfb-filewrap .csc-mmfb-file,
+	DIV.csc-mmfb-intext-left-nowrap DIV.csc-mmfb-filewrap .csc-mmfb-file,
+	DIV.csc-mmfb-intext-left DIV.csc-mmfb-filewrap .csc-mmfb-file {
+		display: inline; /* IE fix for double-margin bug */
+		margin-right: {$styles.content.imgtext.colSpace}px;
+	}
+
+	/* Multimedias on right, add margin on left */
+	DIV.csc-mmfb-right DIV.csc-mmfb-filewrap .csc-mmfb-file,
+	DIV.csc-mmfb-intext-right-nowrap DIV.csc-mmfb-filewrap .csc-mmfb-file,
+	DIV.csc-mmfb-intext-right DIV.csc-mmfb-filewrap .csc-mmfb-file {
+		display: inline; /* IE fix for double-margin bug */
+		margin-left: {$styles.content.imgtext.colSpace}px;
+	}
+
+	/* Multimedias centered, add margin on left */
+	DIV.csc-mmfb-center DIV.csc-mmfb-filewrap .csc-mmfb-file {
+		display: inline; /* IE fix for double-margin bug */
+		margin-left: {$styles.content.imgtext.colSpace}px;
+	}
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap .csc-mmfb-file .csc-mmfb-caption { margin: 0; }
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap .csc-mmfb-file IMG { margin: 0; }
+
+	/* Space below each file (also in-between rows) */
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap .csc-mmfb-file { margin-bottom: {$styles.content.imgtext.rowSpace}px; }
+	DIV.csc-mmfb-equalheight DIV.csc-mmfb-filerow { margin-bottom: {$styles.content.imgtext.rowSpace}px; display: block; }
+	DIV.csc-mmfb DIV.csc-mmfb-filerow { clear: both; }
+
+	/* No margins around the whole file-block */
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap .csc-mmfb-firstcol { margin-left: 0px !important; }
+	DIV.csc-mmfb DIV.csc-mmfb-filewrap .csc-mmfb-lastcol { margin-right: 0px !important; }
+
+	/* Add margin from file-block to text (in case of "Text w/ multimedias") */
+	DIV.csc-mmfb-intext-left DIV.csc-mmfb-filewrap,
+	DIV.csc-mmfb-intext-left-nowrap DIV.csc-mmfb-filewrap {
+		margin-right: {$styles.content.imgtext.textMargin}px !important;
+	}
+	DIV.csc-mmfb-intext-right DIV.csc-mmfb-filewrap,
+	DIV.csc-mmfb-intext-right-nowrap DIV.csc-mmfb-filewrap {
+		margin-left: {$styles.content.imgtext.textMargin}px !important;
+	}
+
+	/* Positioning of files: */
+
+	/* Above */
+	DIV.csc-mmfb-above DIV.csc-mmfb-text { clear: both; }
+
+	/* Center (above or below) */
+	DIV.csc-mmfb-center { text-align: center; /* IE-hack */ }
+	DIV.csc-mmfb-center DIV.csc-mmfb-filewrap { margin: 0 auto; }
+	DIV.csc-mmfb-center DIV.csc-mmfb-filewrap .csc-mmfb-file { text-align: left; /* Remove IE-hack */ }
+	DIV.csc-mmfb-center DIV.csc-mmfb-text { text-align: left; /* Remove IE-hack */ }
+
+	/* Right (above or below) */
+	DIV.csc-mmfb-right DIV.csc-mmfb-filewrap { float: right; }
+	DIV.csc-mmfb-right DIV.csc-mmfb-text { clear: right; }
+
+	/* Left (above or below) */
+	DIV.csc-mmfb-left DIV.csc-mmfb-filewrap { float: left; }
+	DIV.csc-mmfb-left DIV.csc-mmfb-text { clear: left; }
+
+	/* Left (in text) */
+	DIV.csc-mmfb-intext-left DIV.csc-mmfb-filewrap { float: left; }
+
+	/* Right (in text) */
+	DIV.csc-mmfb-intext-right DIV.csc-mmfb-filewrap { float: right; }
+
+	/* Right (in text, no wrap around) */
+	DIV.csc-mmfb-intext-right-nowrap DIV.csc-mmfb-filewrap { float: right; clear: both; }
+	/* Hide from IE5-mac. Only IE-win sees this. \*/
+	* html DIV.csc-mmfb-intext-right-nowrap .csc-mmfb-text { height: 1%; }
+	/* End hide from IE5/mac */
+
+	/* Left (in text, no wrap around) */
+	DIV.csc-mmfb-intext-left-nowrap DIV.csc-mmfb-filewrap { float: left; clear: both; }
+	/* Hide from IE5-mac. Only IE-win sees this. \*/
+	* html DIV.csc-mmfb-intext-left-nowrap .csc-mmfb-text { height: 1%; }
+	/* End hide from IE5/mac */
+
+	/* Controls */
+	.csc-mmfb-controls {
+		position: relative;
+
+		margin: -1px !important;
+		padding: 1px;
+		/* this is the only reason why hover works in FF, mouse must pass the padding-area */
+
+		background: transparent;
+	}
+	.csc-mmfb-controls:hover {
+		background: #CFCFCF;
+	}
+	.csc-mmfb-controls       .csc-mmfb-controlbar {
+		position: absolute;
+
+	/*	bottom: -3px;	*/
+		bottom:  0px;
+		height:  3px;
+		/* safari is very flickery if we can't provide a bigger hover-area */
+
+		left:  1px;
+		right: 1px;
+
+		background: #DFDFDF;
+	}
+	.csc-mmfb-controls:hover .csc-mmfb-controlbar {
+		position: absolute;
+
+		bottom: -16px;
+		height:  16px;
+
+		left:  0px;
+		right: 0px;
+
+		background: #CFCFCF;
+	}
+
+	.csc-mmfb-controls       .csc-mmfb-noplugin {
+		position: relative;
+		margin: -1px;
+		padding: 1px;
+
+		background: #EFAFAF;
+	}
+	.csc-mmfb-controls       .csc-mmfb-noplugin .csc-mmfb-controlbar {
+		left:  0px;
+		right: 0px;
+
+		background: #EFAFAF;
+	}
+	.csc-mmfb-controls:hover .csc-mmfb-noplugin .csc-mmfb-controlbar {
+		left:  0px;
+		right: 0px;
+
+		background: #EFAFAF;
+	}
+
+	.csc-mmfb-controls       .csc-mmfb-control {
+		position: absolute;
+		bottom: 0;
+
+		width: 16px;
+		height: 16px;
+
+		display: none;
+	}
+
+	.csc-mmfb-controls:hover .csc-mmfb-control {
+		display: block;
+	}
+
+	.csc-mmfb-controls       .csc-mmfb-save { right:   2px; cursor: pointer; }
+
+	.csc-mmfb-controls       .csc-mmfb-plug { left:    2px; cursor: pointer; }
+	.csc-mmfb-controls       .csc-mmfb-extn { left:   19px; cursor: pointer; bottom: 1px; font-size: 12px; }
+
+	.csc-mmfb-controls       .csc-mmfb-stop { left:    2px; cursor: pointer; }
+	.csc-mmfb-controls       .csc-mmfb-paus { left:   19px; cursor: pointer; }
+	.csc-mmfb-controls       .csc-mmfb-play { left:   36px; cursor: pointer; }
+)
+
+[END]
